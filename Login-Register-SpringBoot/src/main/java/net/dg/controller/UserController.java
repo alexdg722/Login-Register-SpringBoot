@@ -1,22 +1,29 @@
 package net.dg.controller;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import net.dg.model.ConfirmationToken;
 import net.dg.model.User;
 import net.dg.repository.ConfirmationTokenRepository;
 import net.dg.repository.UserRepository;
 import net.dg.service.EmailService;
+import net.dg.service.UserService;
 
 @Controller
 public class UserController {
 
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -26,7 +33,12 @@ public class UserController {
 	@Autowired
 	private EmailService emailService;
 	
-	@RequestMapping("/")
+	@GetMapping("/login")
+	public String UserLogin() {
+		return "login";
+	}
+	
+	@RequestMapping("/register")
 	public String viewHomePage(ModelAndView modelAndView, User user) {
 		
 		modelAndView.addObject("user", user);
@@ -41,10 +53,11 @@ public class UserController {
 		User existingUser = userRepository.findByEmail(user.getEmail());
 		if(existingUser != null) {
 			modelAndView.addObject("message", "This email already exists!");
-			modelAndView.setViewName("error");
+			modelAndView.setViewName("register");
 		}
 		else {
-			userRepository.save(user);
+		
+			userService.saveUser(user);
 			ConfirmationToken confirmationToken = new ConfirmationToken(user);
 			confirmationTokenRepository.save(confirmationToken);
 			
@@ -77,11 +90,16 @@ public class UserController {
 			modelAndView.setViewName("accountVerified");
 		}
 		else {
-			modelAndView.addObject("message","The link is invalid or broken!");
-            modelAndView.setViewName("error");
+			modelAndView.addObject("message","true");
+            modelAndView.setViewName("accountVerified");
 		}
 		
 		return modelAndView;
+	}
+	
+	@RequestMapping("/profile")
+	public String viewProfile() {
+		return "profile";
 	}
 	
 	

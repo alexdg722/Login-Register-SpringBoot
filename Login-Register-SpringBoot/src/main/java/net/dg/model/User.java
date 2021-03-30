@@ -1,10 +1,18 @@
 package net.dg.model;
 
+import java.util.Collection;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -13,7 +21,6 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
 	private Long id;
 
 	@Column(name = "firstname")
@@ -27,6 +34,37 @@ public class User {
 	private String password;
 
 	private boolean isEnabled;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "users_roles",
+			joinColumns = @JoinColumn(
+		            name = "user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(
+				            name = "role_id", referencedColumnName = "id"))
+	private Collection<Role> roles;
+
+	
+	public User() {
+		
+	}
+
+	public User(String firstName, String lastName, String email, String password) {
+
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.isEnabled = false;
+	}
+
+	public User(String email, String password, boolean isEnabled, Collection<Role> roles) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.isEnabled = isEnabled;
+		this.roles = roles;
+	}
 
 	public Long getId() {
 		return id;
@@ -75,6 +113,18 @@ public class User {
 	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
+
+	public Collection<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
+	}
+
+	
+	
+	
 
 
 
