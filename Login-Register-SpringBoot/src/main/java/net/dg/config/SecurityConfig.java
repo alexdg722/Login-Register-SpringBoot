@@ -35,34 +35,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.requestMatcher(new AntPathRequestMatcher("/**"))
-		.authorizeRequests().antMatchers(
-				"/profile/**").hasRole("USER")
-		.and()
-		.authorizeRequests().antMatchers(
-				"/js/**",
-				"/register",
-				"/*"
-				).permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.loginPage("/login")
-		.defaultSuccessUrl("/profile", true)
-		.permitAll()
-		.and()
-		.logout()
-		.invalidateHttpSession(true)
-		.clearAuthentication(true)
-		.deleteCookies("JSESSIONID")
-		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.logoutSuccessUrl("/login?logout")
-		.permitAll()
-		.and()
-		.exceptionHandling()
-		.accessDeniedPage("/403")
-		.and()
-		.csrf().disable();
+	    http.authorizeRequests()
+	      .antMatchers("/register", "/confirm-account").permitAll()
+	      .antMatchers("/profile/**").hasAuthority("USER")
+	      .anyRequest().authenticated()
+	      .and().formLogin()
+	      .loginPage("/login")
+	      .defaultSuccessUrl("/profile", true)
+	      .permitAll()
+	      .and()
+	      .logout()
+	      .invalidateHttpSession(true)
+	      .clearAuthentication(true)
+	      .deleteCookies("JSESSIONID")
+	      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+	      .logoutSuccessUrl("/login?logout")
+	      .permitAll();
 	}
 	
 	@Override

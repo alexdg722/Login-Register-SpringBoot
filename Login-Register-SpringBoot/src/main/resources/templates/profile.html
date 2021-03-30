@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -24,6 +24,9 @@ h1 {
 	<hr>
 	<br>
 	<br>
+	
+			<h4 class="text-success" th:text="'Welcome ' + ${firstName}"></h4>
+
 
 
 <div th:include="./resources/footer.html"></div>

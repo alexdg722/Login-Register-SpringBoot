@@ -35,13 +35,10 @@ h1 {
 			style="max-width: 400px; margin: 0 auto;">
 
 			<div th:if="${param.error}">
-				<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+				<p class="text-danger">Bad credentials / Account is not activated.</p>
 			</div>
-			
 		
-            <p class="text-danger" th:text="${message}"></p>
-         
-			
+	
 
 			<div th:if="${param.logout}">
 				<p class="text-warning">You have been logged out.</p>

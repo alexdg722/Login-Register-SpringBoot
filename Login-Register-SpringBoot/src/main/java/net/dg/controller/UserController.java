@@ -1,8 +1,5 @@
 package net.dg.controller;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
@@ -10,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import net.dg.model.ConfirmationToken;
 import net.dg.model.User;
@@ -37,6 +35,13 @@ public class UserController {
 	public String UserLogin() {
 		return "login";
 	}
+	
+	@GetMapping("/profile")
+	public String UserHomePage() {
+		return "profile";
+	}
+	
+	
 	
 	@RequestMapping("/register")
 	public String viewHomePage(ModelAndView modelAndView, User user) {
@@ -96,13 +101,6 @@ public class UserController {
 		
 		return modelAndView;
 	}
-	
-	@RequestMapping("/profile")
-	public String viewProfile() {
-		return "profile";
-	}
-	
-	
 	
 	
 }

@@ -1,8 +1,6 @@
 package net.dg.model;
 
 import java.util.Collection;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,6 +54,17 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.isEnabled = false;
+	}
+	
+	public User(String firstName, String lastName, String email, String password, boolean isEnabled,
+			Collection<Role> roles) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.isEnabled = isEnabled;
+		this.roles = roles;
 	}
 
 	public User(String email, String password, boolean isEnabled, Collection<Role> roles) {
@@ -121,12 +130,5 @@ public class User {
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
 	}
-
-	
-	
-	
-
-
-
 
 }

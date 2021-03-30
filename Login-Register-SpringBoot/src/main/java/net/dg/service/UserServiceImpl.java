@@ -32,12 +32,15 @@ public class UserServiceImpl implements UserService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		User user = userRepository.findByEmail(username);
-		
-		if(user == null) {
+		boolean enabled = user.isEnabled();
+		if(user == null || enabled == false) {
+			System.out.println(user.getRoles());
 			throw new UsernameNotFoundException("Invalid username or password/Account is not activated.");
 		}
+		System.out.println(user.isEnabled());
 		
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));	
+		
+		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));		
 
 	}
 
@@ -46,6 +49,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
+	
 
 	@Override
 	public User saveUser(User user) {
