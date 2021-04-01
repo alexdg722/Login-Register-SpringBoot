@@ -18,17 +18,28 @@ h1 {
 	padding: 5px;
 	font-family: "Segoe UI", Arial, sans-serif
 }
+
+h5 {
+	padding: 5px;
+	font-family: "Segoe UI", Arial, sans-serif
+}
+
+container {
+	background: #336; color : #ffffff; padding : 5px;
+	font-family: "Segoe UI", Arial, sans-serif;
+	color: #ffffff;
+	padding: 5px;
+}
 </style>
 <body>
-<h1 class="text-center">User Managment</h1>
-	<hr>
-	<br>
-	<br>
-	
-			<h4 class="text-success" th:text="'Welcome ' + ${firstName}"></h4>
+	<h1 class="text-center">User Managment</h1>
+
+	<div class="text-right" sec:authorize="isAuthenticated()">
+
+		Authenticated as <span style="color: blue" sec:authentication="name"></span>
+	</div>
 
 
-
-<div th:include="./resources/footer.html"></div>
+	<div th:include="./resources/footer.html"></div>
 </body>
 </html>
