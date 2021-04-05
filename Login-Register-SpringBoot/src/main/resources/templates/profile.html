@@ -24,6 +24,10 @@ h5 {
 	font-family: "Segoe UI", Arial, sans-serif
 }
 
+div {
+	padding-right: 15px;
+}
+
 container {
 	background: #336; color : #ffffff; padding : 5px;
 	font-family: "Segoe UI", Arial, sans-serif;
@@ -35,8 +39,9 @@ container {
 	<h1 class="text-center">User Managment</h1>
 
 	<div class="text-right" sec:authorize="isAuthenticated()">
-
 		Authenticated as <span style="color: blue" sec:authentication="name"></span>
+		<br>
+		<a th:href = "@{/logout}" style="color:blue;"><strong>Logout</strong></a>
 	</div>
 
 
