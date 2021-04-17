@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,75 +22,73 @@ import net.dg.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService {
 
-	
-	@Autowired
-	private UserRepository userRepository;
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		User user = userRepository.findByEmail(username);
-		boolean enabled = user.isEnabled();
-		if(user == null || enabled == false) {
-			System.out.println(user.getRoles());
-			throw new UsernameNotFoundException("Invalid username or password/Account is not activated.");
-		}
-		System.out.println(user.isEnabled());
-		
-		
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));		
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-	@Override
-	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return userRepository.findAll();
-	}
-	
+        User user = userRepository.findByEmail(username);
+        boolean enabled = user.isEnabled();
+        if (user == null || enabled == false) {
+            System.out.println(user.getRoles());
+            throw new UsernameNotFoundException("Invalid username or password/Account is not activated.");
+        }
+        System.out.println(user.isEnabled());
 
-	@Override
-	public User saveUser(User user) {
-		user.setPassword(passwordEncoder.encode((user.getPassword())));
-		user.setRoles(Arrays.asList(new Role("USER")));
-		return userRepository.save(user);
-	}
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
 
-	@Override
-	public List<User> findByKeyboard(String keyboard) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	@Override
-	public User getUserById(long id) {
+    @Override
+    public List<User> getAllUsers() {
+        // TODO Auto-generated method stub
+        return userRepository.findAll();
+    }
 
-		Optional<User> optional = userRepository.findById(id);
-		User user = null;
 
-		if(optional.isPresent()) {
-			user = optional.get();
-		}
-		else {
-			throw new RuntimeException(" User with id: " + id + " not found");
-		}
-		return user;
-	}
+    @Override
+    public User saveUser(User user) {
+        user.setPassword(passwordEncoder.encode((user.getPassword())));
+        user.setConfirmPassword(user.getPassword());
+        user.setConfirmEmail(user.getEmail());
+        user.setRoles(Arrays.asList(new Role("USER")));
+        return userRepository.save(user);
+    }
 
-	@Override
-	public void deleteUserById(long id) {
-		this.userRepository.deleteById(id);
+    @Override
+    public List<User> findByKeyboard(String keyboard) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	}
-	
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-	}
-	
+    @Override
+    public User getUserById(long id) {
 
+        Optional<User> optional = userRepository.findById(id);
+        User user = null;
+
+        if (optional.isPresent()) {
+            user = optional.get();
+        } else {
+            throw new RuntimeException(" User with id: " + id + " not found");
+        }
+        return user;
+    }
+
+    @Override
+    public void deleteUserById(long id) {
+        this.userRepository.deleteById(id);
+
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
 
 
 }
