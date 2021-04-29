@@ -1,20 +1,22 @@
 package net.dg.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import net.dg.model.ConfirmationToken;
 import net.dg.model.User;
 import net.dg.repository.ConfirmationTokenRepository;
 import net.dg.repository.UserRepository;
 import net.dg.service.EmailService;
 import net.dg.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -35,14 +37,18 @@ public class UserController {
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    private final static String forgotPassword = "forgotPassword";
+    private final static String register = "register";
+    private final static String resetPassword = "resetPassword";
+
     @GetMapping("/login")
-    public String UserLogin(Model model) {
+    public String userLogin(Model model) {
 
         return "login";
     }
 
     @GetMapping("/profile")
-    public String UserHomePage() {
+    public String userHomePage() {
         return "profile";
     }
 
@@ -51,8 +57,8 @@ public class UserController {
     public String viewHomePage(ModelAndView modelAndView, User user) {
 
         modelAndView.addObject("user", user);
-        modelAndView.setViewName("register");
-        return "register";
+        modelAndView.setViewName(register);
+        return register;
     }
 
 
@@ -63,12 +69,12 @@ public class UserController {
         User existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser != null) {
             modelAndView.addObject("message", "This email already exists!");
-            modelAndView.setViewName("register");
+            modelAndView.setViewName(register);
         }
 
         if (bindingResult.hasErrors()) {
 
-            modelAndView.setViewName("register");
+            modelAndView.setViewName(register);
         } else {
 
             userService.saveUser(user);
@@ -115,7 +121,7 @@ public class UserController {
     @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
     public ModelAndView displayResetPassword(ModelAndView modelAndView, User user) {
         modelAndView.addObject("user", user);
-        modelAndView.setViewName("forgotPassword");
+        modelAndView.setViewName(forgotPassword);
         return modelAndView;
     }
 
@@ -139,10 +145,10 @@ public class UserController {
 
             modelAndView.addObject("succes", "Request to reset password received" +
                     ", check your inbox for the reset link.");
-            modelAndView.setViewName("forgotPassword");
+            modelAndView.setViewName(forgotPassword);
         } else {
             modelAndView.addObject("error", "This email does not exist!");
-            modelAndView.setViewName("forgotPassword");
+            modelAndView.setViewName(forgotPassword);
         }
 
         return modelAndView;
@@ -160,10 +166,10 @@ public class UserController {
             userRepository.save(user);
             modelAndView.addObject("user", user);
             modelAndView.addObject("email", user.getEmail());
-            modelAndView.setViewName("resetPassword");
+            modelAndView.setViewName(resetPassword);
         } else {
             modelAndView.addObject("error", "The link is invalid or broken!");
-            modelAndView.setViewName("resetPassword");
+            modelAndView.setViewName(resetPassword);
         }
 
         return modelAndView;
@@ -181,10 +187,10 @@ public class UserController {
             userRepository.save(tokenUser);
             modelAndView.addObject("succes", "Password succesfully reseted." +
                     "You can now log in with the new credentials.");
-            modelAndView.setViewName("resetPassword");
+            modelAndView.setViewName(resetPassword);
         } else {
             modelAndView.addObject("error", "The link is invalid or broken!");
-            modelAndView.setViewName("resetPassword");
+            modelAndView.setViewName(resetPassword);
         }
         return modelAndView;
     }

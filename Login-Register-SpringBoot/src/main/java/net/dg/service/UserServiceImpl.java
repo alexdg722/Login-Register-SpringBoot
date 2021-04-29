@@ -1,13 +1,8 @@
 package net.dg.service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import net.dg.model.Role;
+import net.dg.model.User;
+import net.dg.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,9 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import net.dg.model.Role;
-import net.dg.model.User;
-import net.dg.repository.UserRepository;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByEmail(username);
         boolean enabled = user.isEnabled();
-        if (user == null || enabled == false) {
+        if (!enabled) {
             System.out.println(user.getRoles());
             throw new UsernameNotFoundException("Invalid username or password/Account is not activated.");
         }

@@ -1,8 +1,9 @@
 package net.dg.service;
 
-import java.util.List;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import net.dg.model.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
 	

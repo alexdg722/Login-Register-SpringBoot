@@ -1,15 +1,14 @@
 package net.dg.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.dg.constraint.FieldMatch;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.*;
 
 
 @AllArgsConstructor
@@ -21,6 +20,8 @@ import javax.persistence.*;
 @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match.")
 @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match.")
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 1905122041950251207L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +52,7 @@ public class User implements Serializable {
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
+
     private Collection<Role> roles;
 
 }

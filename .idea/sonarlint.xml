@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SonarLintProjectSettings">
+    <option name="fileExclusions">
+      <list>
+        <option value="FILE:.mvn/wrapper/MavenWrapperDownloader.java" />
+        <option value="FILE:src/main/java/net/dg/model/ConfirmationToken.java" />
+        <option value="FILE:src/test/java/net/dg/LoginRegisterSpringBootApplicationTests.java" />
+      </list>
+    </option>
+  </component>
+</project>

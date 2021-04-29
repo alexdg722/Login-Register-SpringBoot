@@ -1,7 +1,7 @@
 package net.dg.constraint;
 
-import javax.validation.Payload;
 import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
